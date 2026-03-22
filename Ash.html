@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retail Sales Calculator</title>
+<style>
+body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#f1f5f9; }
+.container{ display:grid; grid-template-columns:2fr 1fr; gap:20px; padding:20px; max-width:1550px; margin:auto; }
+.card{ background:white; padding:12px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.06); margin-bottom:12px; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+.item-box{ background:#f8fafc; padding:10px; border-radius:8px; }
+.input-row{ display:flex; gap:6px; }
+input[type="number"], select{ width:100%; padding:6px; font-size:15px; border-radius:6px; border:1px solid #cbd5e1; appearance:textfield; }
+input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+input[type=number]{-moz-appearance:textfield;}
+label{ font-size:13px; margin-top:4px; display:block; }
+.summary{ display:flex; flex-direction:column; }
+.summary-row{ display:flex; justify-content:space-between; margin-bottom:6px; font-size:16px; }
+.grand{ font-size:26px; font-weight:bold; color:#16a34a; border-top:1px solid #e2e8f0; padding-top:10px; margin-top:10px; }
+.hidden{display:none;}
+.discount-value{ color:#dc2626; font-weight:600;}
+.discount-pop{ animation:discountPop .35s ease; }
+@keyframes discountPop{ 0%{transform:scale(1);} 50%{transform:scale(1.2);} 100%{transform:scale(1);} }
+.savings{ margin-top:10px; background:#16a34a; color:white; text-align:center; font-weight:700; padding:10px; border-radius:8px; font-size:18px;}
+.finance-box{ margin-top:10px; padding:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;}
+.big-monthly{ font-size:26px; font-weight:700; color:#111827; margin:0;}
+.months-big{ font-weight:700; font-size:22px; display:block; margin-bottom:4px;}
+#upfrontNotice{ color:#f97316; font-weight:700; font-size:16px; margin-top:6px;}
+.card .grid.promotions-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px 10px; }
+.card .grid.promotions-grid h4{ margin:0 0 2px 0;}
+.card .grid.promotions-grid select{ padding:4px 6px; font-size:14px;}
+</style>
+</head>
+<body>
+
+<div style="text-align:center;margin-top:20px;">
+<img src="C:\Users\filip\OneDrive\Documents\Ashley\Ashley.png" style="max-width:180px;">
+</div>
+
+<div class="container">
+<div>
+
+<div class="card">
+<h3>Merchandise</h3>
+<div class="grid" id="itemsContainer"></div>
+</div>
+
+<div class="card">
+<h3>Promotions</h3>
+<div class="grid promotions-grid">
+
+<div>
+<h4>VIP Buy More Save More</h4>
+<select id="vipBmsm" onchange="selectPromo(this)">
+<option value="">None</option>
+<option data-type="cash" data-min="3999" data-discount="18">18% off - Min 3999</option>
+<option data-type="cash" data-min="1999" data-discount="15">15% off - Min 1999</option>
+<option data-type="cash" data-min="0" data-discount="12">12% off - No min</option>
+</select>
+</div>
+
+<div>
+<h4>Buy More Save More</h4>
+<select id="bmsm" onchange="selectPromo(this)">
+<option value="">None</option>
+<option data-type="cash" data-min="4999" data-discount="15">15% off - Min 4999</option>
+<option data-type="cash" data-min="2999" data-discount="12">12% off - Min 2999</option>
+<option data-type="cash" data-min="999.99" data-discount="10">10% off - Min 999.99</option>
+<option data-type="cash" data-min="0" data-discount="8">8% off - No min</option>
+</select>
+</div>
+
+<div>
+<h4>VIP Pay Your Way</h4>
+<select id="vipPyw" onchange="selectPromo(this)">
+<option value="">None</option>
+<option data-type="finance" data-min="0" data-discount="10" data-months="12">12 months – 10% off no min</option>
+<option data-type="finance" data-min="999" data-discount="8" data-months="24">24 months – 8% off min 999</option>
+<option data-type="finance" data-min="1499" data-discount="5" data-months="36">36 months – 5% off min 1,499</option>
+<option data-type="finance" data-min="1999" data-discount="0" data-months="60" data-down="15">60 months – 15% Down min 1,999</option>
+</select>
+</div>
+
+<div>
+<h4>Pay Your Way</h4>
+<select id="pyw" onchange="selectPromo(this)">
+<option value="">None</option>
+<option data-type="finance" data-min="1499" data-discount="10" data-months="12">12 months – 10% off min 1,499</option>
+<option data-type="finance" data-min="1999" data-discount="8" data-months="24">24 months – 8% off min 1,999</option>
+<option data-type="finance" data-min="2999" data-discount="5" data-months="36">36 months – 5% off min 2,999</option>
+<option data-type="finance" data-min="2999" data-discount="0" data-months="60" data-down="10">60 months – 10% Down min 2,999</option>
+</select>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h3>Tax & Delivery</h3>
+
+<strong>Tax (6%)</strong>
+
+<br><br>
+
+<strong>Delivery</strong>
+<select id="delivery" onchange="calculate()">
+<option value="no">No Delivery</option>
+<option value="white">White Glove Delivery</option>
+<option value="drop">Drop Off Delivery</option>
+</select>
+
+</div>
+
+</div>
+
+<div class="card summary">
+
+<div class="summary-row"><span>Merchandise Total</span><span id="merchTotal">$0.00</span></div>
+<div class="summary-row"><span>Discount</span><span id="discount" class="discount-value">-$0.00</span></div>
+<div class="summary-row"><span>Protection</span><span id="protectionCost">$0.00</span></div>
+<div class="summary-row"><span>Tax</span><span id="taxSummary">$0.00</span></div>
+<div class="summary-row"><span>Delivery</span><span id="deliverySummary">$0.00</span></div>
+
+<div class="summary-row grand"><span>Grand Total</span><span id="grandTotal">$0.00</span></div>
+
+<div id="savingsBanner" class="savings hidden">You Save $0.00</div>
+
+<div class="finance-box hidden">
+
+<label>
+<input type="checkbox" id="excludeTaxDelivery" onchange="calculate()"> Upfront Tax & Delivery
+</label>
+
+<div id="upfrontNotice" class="hidden"></div>
+
+<span class="months-big" id="financeMonths">0 Months</span>
+<div class="big-monthly" id="bigMonthly"></div>
+
+</div>
+</div>
+</div>
+
+<script>
+
+const container=document.getElementById("itemsContainer");
+
+for(let i=1;i<=6;i++){
+
+container.innerHTML+=`
+<div class="item-box">
+<strong>Item ${i}</strong>
+<div class="input-row">
+<input type="number" class="item" placeholder="Price" step="0.01" oninput="calculate()">
+<input type="number" class="qty" placeholder="Qty" value="1" oninput="calculate()">
+</div>
+<label><input type="checkbox" class="protect" onchange="calculate()"> Apply Protection</label>
+</div>`;
+
+}
+
+let activePromo=null;
+
+function selectPromo(menu){
+
+["vipBmsm","bmsm","vipPyw","pyw"].forEach(id=>{
+
+if(id!==menu.id) document.getElementById(id).selectedIndex=0;
+
+});
+
+activePromo=menu.options[menu.selectedIndex];
+
+calculate();
+
+}
+
+function getProtection(total){
+
+if(total<=0) return 0;
+if(total<=500) return 99.99;
+if(total<=750.99) return 119.95;
+if(total<=1000.99) return 139.95;
+if(total<=1250.99) return 169.95;
+if(total<=1500.99) return 199.95;
+if(total<=1750.99) return 229.95;
+if(total<=2000.99) return 259.95;
+if(total<=2250.99) return 289.95;
+if(total<=2500.99) return 310.95;
+if(total<=2750.99) return 349.95;
+if(total<=3000.99) return 369.95;
+if(total<=4000.99) return 419.95;
+if(total<=5000.99) return 469.95;
+if(total<=6000.99) return 519.95;
+if(total<=7000.99) return 569.95;
+if(total<=8000.99) return 619.95;
+if(total>=9000) return 999.99;
+
+return 0;
+
+}
+
+function getDelivery(total){
+
+if(total<=799.99) return 99.99;
+if(total<=1299.99) return 169.99;
+if(total<=1699.99) return 199.99;
+if(total<=1999.99) return 239.99;
+if(total<=2499.99) return 279.99;
+if(total<=2999.99) return 299.99;
+if(total<=3499.99) return 359.99;
+if(total<=3999.99) return 399.99;
+if(total<=4999.99) return 439.99;
+if(total<=5999.99) return 499.99;
+if(total<=6999.99) return 549.99;
+if(total<=9999.99) return 599.99;
+
+return 699.99;
+
+}
+
+function getDropOffDelivery(total){
+
+if(total<=799.99) return 69.99;
+if(total<=1299.99) return 89.99;
+if(total<=1699.99) return 99.99;
+if(total<=1999.99) return 119.99;
+if(total<=2499.99) return 139.99;
+if(total<=2999.99) return 159.99;
+if(total<=3499.99) return 179.99;
+if(total<=3999.99) return 199.99;
+
+return 0;
+
+}
+
+function calculate(){
+
+let items=document.querySelectorAll(".item");
+let qtys=document.querySelectorAll(".qty");
+let checks=document.querySelectorAll(".protect");
+
+let subtotal=0;
+let protectionTotal=0;
+
+for(let i=0;i<items.length;i++){
+
+let price=parseFloat(items[i].value)||0;
+let qty=parseInt(qtys[i].value)||0;
+
+let itemTotal=price*qty;
+
+subtotal+=itemTotal;
+
+if(checks[i].checked) protectionTotal+=itemTotal;
+
+}
+
+let discount=0;
+let months=0;
+
+if(activePromo && activePromo.dataset.min){
+
+let min=parseFloat(activePromo.dataset.min);
+
+if(subtotal>=min){
+
+discount=subtotal*(parseFloat(activePromo.dataset.discount)/100||0);
+
+months=parseInt(activePromo.dataset.months)||0;
+
+}
+
+}
+
+let afterDiscount=subtotal-discount;
+
+let protectionCost=(protectionTotal>0)?getProtection(protectionTotal):0;
+
+let tax=(afterDiscount+protectionCost)*0.06;
+
+let deliveryType=document.getElementById("delivery").value;
+
+let delivery=0;
+
+if(deliveryType==="white"){
+
+delivery=getDelivery(subtotal);
+
+}
+
+else if(deliveryType==="drop"){
+
+delivery=getDropOffDelivery(subtotal);
+
+}
+
+if(document.getElementById("excludeTaxDelivery").checked){
+
+let totalUpfront=(tax+delivery).toFixed(2);
+
+document.getElementById("upfrontNotice").innerText=`Tax + Delivery = $${totalUpfront}`;
+
+document.getElementById("upfrontNotice").classList.remove("hidden");
+
+tax=0;
+
+delivery=0;
+
+}else{
+
+document.getElementById("upfrontNotice").classList.add("hidden");
+
+}
+
+document.getElementById("protectionCost").innerText=`$${protectionCost.toFixed(2)}`;
+
+document.getElementById("taxSummary").innerText=`$${tax.toFixed(2)}`;
+
+document.getElementById("deliverySummary").innerText=`$${delivery.toFixed(2)}`;
+
+let grand=afterDiscount+protectionCost+tax+delivery;
+
+document.getElementById("grandTotal").innerText=`$${grand.toFixed(2)}`;
+
+document.getElementById("merchTotal").innerText=`$${subtotal.toFixed(2)}`;
+
+let discountEl=document.getElementById("discount");
+
+if(discount>0){
+
+discountEl.innerText=`-$${discount.toFixed(2)}`;
+
+}else{
+
+discountEl.innerText="$0.00";
+
+}
+
+let banner=document.getElementById("savingsBanner");
+
+if(discount>0){
+
+banner.innerText=`You Save $${discount.toFixed(2)}`;
+
+banner.classList.remove("hidden");
+
+}else{
+
+banner.classList.add("hidden");
+
+}
+
+let financeBox=document.querySelector(".finance-box");
+
+if(months>0){
+
+let monthly=grand/months;
+
+document.getElementById("financeMonths").innerText=`${months} Months`;
+
+document.getElementById("bigMonthly").innerText=`Only $${monthly.toFixed(2)} / month`;
+
+financeBox.classList.remove("hidden");
+
+}else{
+
+financeBox.classList.add("hidden");
+
+}
+
+}
+
+calculate();
+
+</script>
+
+</body>
+</html>
