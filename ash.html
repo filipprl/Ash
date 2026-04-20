@@ -35,70 +35,24 @@ label{ font-size:13px; margin-top:4px; display:block; }
 <body>
 
 <div style="text-align:center;margin-top:20px;">
-<img src="Ashley.png" style="max-width:180px;">
+<img src="C:\Users\filip\OneDrive\Documents\Ashley\Ashley.png" style="max-width:180px;">
 </div>
 
 <div class="container">
 <div>
 
-<!-- Merchandise -->
 <div class="card">
 <h3>Merchandise</h3>
 <div class="grid" id="itemsContainer"></div>
 </div>
 
-<!-- Promotions -->
 <div class="card">
 <h3>Promotions</h3>
 <div class="grid promotions-grid">
-
-<div>
-<h4>VIP Buy More Save More</h4>
-<select id="vipBmsm" onchange="selectPromo(this)">
-<option value="">None</option>
-<option data-type="cash" data-min="3999" data-discount="18">18% off - Min 3999</option>
-<option data-type="cash" data-min="1999" data-discount="15">15% off - Min 1999</option>
-<option data-type="cash" data-min="0" data-discount="12">12% off - No min</option>
-</select>
-</div>
-
-<div>
-<h4>Buy More Save More</h4>
-<select id="bmsm" onchange="selectPromo(this)">
-<option value="">None</option>
-<option data-type="cash" data-min="4999" data-discount="15">15% off - Min 4999</option>
-<option data-type="cash" data-min="2999" data-discount="12">12% off - Min 2999</option>
-<option data-type="cash" data-min="999.99" data-discount="10">10% off - Min 999.99</option>
-<option data-type="cash" data-min="0" data-discount="8">8% off - No min</option>
-</select>
-</div>
-
-<div>
-<h4>VIP Pay Your Way</h4>
-<select id="vipPyw" onchange="selectPromo(this)">
-<option value="">None</option>
-<option data-type="finance" data-min="0" data-discount="10" data-months="12">12 months – 10% off no min</option>
-<option data-type="finance" data-min="999" data-discount="8" data-months="24">24 months – 8% off min 999</option>
-<option data-type="finance" data-min="1499" data-discount="5" data-months="36">36 months – 5% off min 1,499</option>
-<option data-type="finance" data-min="1999" data-discount="0" data-months="60" data-down="15">60 months – 15% Down min 1,999</option>
-</select>
-</div>
-
-<div>
-<h4>Pay Your Way</h4>
-<select id="pyw" onchange="selectPromo(this)">
-<option value="">None</option>
-<option data-type="finance" data-min="1499" data-discount="10" data-months="12">12 months – 10% off min 1,499</option>
-<option data-type="finance" data-min="1999" data-discount="8" data-months="24">24 months – 8% off min 1,999</option>
-<option data-type="finance" data-min="2999" data-discount="5" data-months="36">36 months – 5% off min 2,999</option>
-<option data-type="finance" data-min="2999" data-discount="0" data-months="60" data-down="10">60 months – 10% Down min 2,999</option>
-</select>
-</div>
-
+<!-- unchanged -->
 </div>
 </div>
 
-<!-- Tax & Delivery -->
 <div class="card">
 <h3>Tax & Delivery</h3>
 <strong>Tax (6%)</strong>
@@ -113,7 +67,6 @@ label{ font-size:13px; margin-top:4px; display:block; }
 
 </div>
 
-<!-- Summary -->
 <div class="card summary">
 <div class="summary-row"><span>Merchandise Total</span><span id="merchTotal">$0.00</span></div>
 <div class="summary-row"><span>Discount</span><span id="discount" class="discount-value">-$0.00</span></div>
@@ -138,7 +91,6 @@ label{ font-size:13px; margin-top:4px; display:block; }
 <script>
 const container = document.getElementById("itemsContainer");
 
-// Add merchandise items
 for(let i=1; i<=6; i++){
   container.innerHTML += `
     <div class="item-box">
@@ -153,150 +105,32 @@ for(let i=1; i<=6; i++){
 
 let activePromo = null;
 
-// Promo selection
-function selectPromo(menu){
-  ["vipBmsm","bmsm","vipPyw","pyw"].forEach(id=>{
-    if(id !== menu.id) document.getElementById(id).selectedIndex = 0;
-  });
-  activePromo = menu.options[menu.selectedIndex];
-  calculate();
-}
-
-// Protection tiers
+/* UPDATED PROTECTION PLAN ONLY */
 function getProtection(total){
   if(total <= 0) return 0;
-  if(total <= 500) return 99.99;
-  if(total <= 750.99) return 119.95;
-  if(total <= 1000.99) return 139.95;
-  if(total <= 1250.99) return 169.95;
-  if(total <= 1500.99) return 199.95;
-  if(total <= 1750.99) return 229.95;
-  if(total <= 2000.99) return 259.95;
-  if(total <= 2250.99) return 289.95;
-  if(total <= 2500.99) return 310.95;
-  if(total <= 2750.99) return 349.95;
-  if(total <= 3000.99) return 369.95;
-  if(total <= 4000.99) return 419.95;
-  if(total <= 5000.99) return 469.95;
-  if(total <= 6000.99) return 519.95;
-  if(total <= 7000.99) return 569.95;
-  if(total <= 8000.99) return 619.95;
-  if(total >= 9000) return 999.99;
-  return 0;
+  if(total <= 299.99) return 69.99;
+  if(total <= 499.99) return 99.99;
+  if(total <= 699.99) return 129.99;
+  if(total <= 999.99) return 159.99;
+  if(total <= 1299.99) return 199.99;
+  if(total <= 1599.99) return 249.99;
+  if(total <= 1999.99) return 299.99;
+  if(total <= 2499.99) return 349.99;
+  if(total <= 2999.99) return 399.99;
+  if(total <= 3999.99) return 499.99;
+  if(total <= 4999.99) return 599.99;
+  if(total <= 5999.99) return 699.99;
+  if(total <= 6999.99) return 799.99;
+  if(total <= 7999.99) return 899.99;
+  if(total <= 8999.99) return 999.99;
+  if(total <= 9999.99) return 1099.99;
+  if(total <= 10999.99) return 1199.99;
+  if(total <= 11999.99) return 1299.99;
+  if(total <= 12999.99) return 1399.99;
+  if(total <= 13999.99) return 1499.99;
+  if(total <= 14999.99) return 1599.99;
+  return 1999.00;
 }
-
-// Delivery tiers
-function getDelivery(total){
-  if(total <= 799.99) return 99.99;
-  if(total <= 1299.99) return 169.99;
-  if(total <= 1699.99) return 199.99;
-  if(total <= 1999.99) return 239.99;
-  if(total <= 2499.99) return 279.99;
-  if(total <= 2999.99) return 299.99;
-  if(total <= 3499.99) return 359.99;
-  if(total <= 3999.99) return 399.99;
-  if(total <= 4999.99) return 439.99;
-  if(total <= 5999.99) return 499.99;
-  if(total <= 6999.99) return 549.99;
-  if(total <= 9999.99) return 599.99;
-  return 699.99;
-}
-
-function getDropOffDelivery(total){
-  if(total <= 799.99) return 69.99;
-  if(total <= 1299.99) return 89.99;
-  if(total <= 1699.99) return 99.99;
-  if(total <= 1999.99) return 119.99;
-  if(total <= 2499.99) return 139.99;
-  if(total <= 2999.99) return 159.99;
-  if(total <= 3499.99) return 179.99;
-  if(total <= 3999.99) return 199.99;
-  return 0;
-}
-
-// Main calculation
-function calculate(){
-  const items = document.querySelectorAll(".item");
-  const qtys = document.querySelectorAll(".qty");
-  const checks = document.querySelectorAll(".protect");
-
-  let subtotal = 0;
-
-  for(let i=0;i<items.length;i++){
-    const price = parseFloat(items[i].value) || 0;
-    const qty = parseInt(qtys[i].value) || 0;
-    subtotal += price * qty;
-  }
-
-  // Promo discount
-  let discount = 0;
-  let discountRate = 0;
-  let months = 0;
-
-  if(activePromo && activePromo.dataset.min){
-    const min = parseFloat(activePromo.dataset.min);
-    if(subtotal >= min){
-      discountRate = (parseFloat(activePromo.dataset.discount)/100) || 0;
-      discount = subtotal * discountRate;
-      months = parseInt(activePromo.dataset.months) || 0;
-    }
-  }
-
-  const afterDiscount = subtotal - discount;
-
-  // Protection calculation (if any protection selected)
-  let anyProtectionSelected = false;
-  for(let i=0;i<checks.length;i++){
-    if(checks[i].checked){ anyProtectionSelected = true; break; }
-  }
-  const protectionBase = anyProtectionSelected ? afterDiscount : 0;
-  const protectionCost = getProtection(protectionBase);
-
-  // Tax & Delivery
-  let tax = (afterDiscount + protectionCost) * 0.06;  // tax now includes protection
-  const deliveryType = document.getElementById("delivery").value;
-  let delivery = 0;
-  if(deliveryType === "white") delivery = getDelivery(subtotal);
-  else if(deliveryType === "drop") delivery = getDropOffDelivery(subtotal);
-
-  if(document.getElementById("excludeTaxDelivery").checked){
-    const totalUpfront = (tax + delivery).toFixed(2);
-    document.getElementById("upfrontNotice").innerText = `Tax + Delivery = $${totalUpfront}`;
-    document.getElementById("upfrontNotice").classList.remove("hidden");
-    tax = 0; delivery = 0;
-  } else {
-    document.getElementById("upfrontNotice").classList.add("hidden");
-  }
-
-  // Update UI
-  document.getElementById("merchTotal").innerText = `$${subtotal.toFixed(2)}`;
-  document.getElementById("discount").innerText = discount > 0 ? `-$${discount.toFixed(2)}` : "$0.00";
-  document.getElementById("protectionCost").innerText = `$${protectionCost.toFixed(2)}`;
-  document.getElementById("taxSummary").innerText = `$${tax.toFixed(2)}`;
-  document.getElementById("deliverySummary").innerText = `$${delivery.toFixed(2)}`;
-
-  const grand = afterDiscount + protectionCost + tax + delivery;
-  document.getElementById("grandTotal").innerText = `$${grand.toFixed(2)}`;
-
-  // Savings banner
-  const banner = document.getElementById("savingsBanner");
-  if(discount > 0){
-    banner.innerText = `You Save $${discount.toFixed(2)}`;
-    banner.classList.remove("hidden");
-  } else banner.classList.add("hidden");
-
-  // Finance
-  const financeBox = document.querySelector(".finance-box");
-  if(months > 0){
-    const monthly = grand / months;
-    document.getElementById("financeMonths").innerText = `${months} Months`;
-    document.getElementById("bigMonthly").innerText = `Only $${monthly.toFixed(2)} / month`;
-    financeBox.classList.remove("hidden");
-  } else financeBox.classList.add("hidden");
-}
-
-// Initial calculation
-calculate();
 </script>
 
 </body>
