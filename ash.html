@@ -20,6 +20,8 @@ label{ font-size:13px; margin-top:4px; display:block; }
 .grand{ font-size:26px; font-weight:bold; color:#16a34a; border-top:1px solid #e2e8f0; padding-top:10px; margin-top:10px; }
 .hidden{display:none;}
 .discount-value{ color:#dc2626; font-weight:600;}
+.discount-pop{ animation:discountPop .35s ease; }
+@keyframes discountPop{ 0%{transform:scale(1);} 50%{transform:scale(1.2);} 100%{transform:scale(1);} }
 .savings{ margin-top:10px; background:#16a34a; color:white; text-align:center; font-weight:700; padding:10px; border-radius:8px; font-size:18px;}
 .finance-box{ margin-top:10px; padding:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; text-align:center;}
 .big-monthly{ font-size:26px; font-weight:700; color:#111827; margin:0;}
@@ -30,7 +32,6 @@ label{ font-size:13px; margin-top:4px; display:block; }
 .card .grid.promotions-grid select{ padding:4px 6px; font-size:14px;}
 </style>
 </head>
-
 <body>
 
 <div style="text-align:center;margin-top:20px;">
@@ -38,7 +39,6 @@ label{ font-size:13px; margin-top:4px; display:block; }
 </div>
 
 <div class="container">
-
 <div>
 
 <!-- Merchandise -->
@@ -133,12 +133,12 @@ label{ font-size:13px; margin-top:4px; display:block; }
 <div class="big-monthly" id="bigMonthly"></div>
 </div>
 </div>
-
 </div>
 
 <script>
 const container = document.getElementById("itemsContainer");
 
+// Add merchandise items
 for(let i=1; i<=6; i++){
   container.innerHTML += `
     <div class="item-box">
@@ -153,6 +153,7 @@ for(let i=1; i<=6; i++){
 
 let activePromo = null;
 
+// Promo selection
 function selectPromo(menu){
   ["vipBmsm","bmsm","vipPyw","pyw"].forEach(id=>{
     if(id !== menu.id) document.getElementById(id).selectedIndex = 0;
@@ -161,9 +162,10 @@ function selectPromo(menu){
   calculate();
 }
 
-/* ✅ UPDATED PROTECTION PLAN (ONLY CHANGE) */
+// Protection tiers (UPDATED)
 function getProtection(total){
   if(total <= 0) return 0;
+
   if(total <= 299.99) return 69.99;
   if(total <= 499.99) return 99.99;
   if(total <= 699.99) return 129.99;
@@ -173,22 +175,136 @@ function getProtection(total){
   if(total <= 1999.99) return 299.99;
   if(total <= 2499.99) return 349.99;
   if(total <= 2999.99) return 399.99;
+
   if(total <= 3999.99) return 499.99;
   if(total <= 4999.99) return 599.99;
   if(total <= 5999.99) return 699.99;
   if(total <= 6999.99) return 799.99;
   if(total <= 7999.99) return 899.99;
   if(total <= 8999.99) return 999.99;
+
   if(total <= 9999.99) return 1099.99;
   if(total <= 10999.99) return 1199.99;
   if(total <= 11999.99) return 1299.99;
   if(total <= 12999.99) return 1399.99;
   if(total <= 13999.99) return 1499.99;
   if(total <= 14999.99) return 1599.99;
+
   return 1999.00;
 }
 
-/* (everything else unchanged — your full calculate() continues here) */
+// Delivery tiers
+function getDelivery(total){
+  if(total <= 799.99) return 99.99;
+  if(total <= 1299.99) return 169.99;
+  if(total <= 1699.99) return 199.99;
+  if(total <= 1999.99) return 239.99;
+  if(total <= 2499.99) return 279.99;
+  if(total <= 2999.99) return 299.99;
+  if(total <= 3499.99) return 359.99;
+  if(total <= 3999.99) return 399.99;
+  if(total <= 4999.99) return 439.99;
+  if(total <= 5999.99) return 499.99;
+  if(total <= 6999.99) return 549.99;
+  if(total <= 9999.99) return 599.99;
+  return 699.99;
+}
+
+function getDropOffDelivery(total){
+  if(total <= 799.99) return 69.99;
+  if(total <= 1299.99) return 89.99;
+  if(total <= 1699.99) return 99.99;
+  if(total <= 1999.99) return 119.99;
+  if(total <= 2499.99) return 139.99;
+  if(total <= 2999.99) return 159.99;
+  if(total <= 3499.99) return 179.99;
+  if(total <= 3999.99) return 199.99;
+  return 0;
+}
+
+// Main calculation
+function calculate(){
+  const items = document.querySelectorAll(".item");
+  const qtys = document.querySelectorAll(".qty");
+  const checks = document.querySelectorAll(".protect");
+
+  let subtotal = 0;
+
+  for(let i=0;i<items.length;i++){
+    const price = parseFloat(items[i].value) || 0;
+    const qty = parseInt(qtys[i].value) || 0;
+    subtotal += price * qty;
+  }
+
+  // Promo discount
+  let discount = 0;
+  let discountRate = 0;
+  let months = 0;
+
+  if(activePromo && activePromo.dataset.min){
+    const min = parseFloat(activePromo.dataset.min);
+    if(subtotal >= min){
+      discountRate = (parseFloat(activePromo.dataset.discount)/100) || 0;
+      discount = subtotal * discountRate;
+      months = parseInt(activePromo.dataset.months) || 0;
+    }
+  }
+
+  const afterDiscount = subtotal - discount;
+
+  // Protection calculation (if any protection selected)
+  let anyProtectionSelected = false;
+  for(let i=0;i<checks.length;i++){
+    if(checks[i].checked){ anyProtectionSelected = true; break; }
+  }
+  const protectionBase = anyProtectionSelected ? afterDiscount : 0;
+  const protectionCost = getProtection(protectionBase);
+
+  // Tax & Delivery
+  let tax = (afterDiscount + protectionCost) * 0.06;  // tax now includes protection
+  const deliveryType = document.getElementById("delivery").value;
+  let delivery = 0;
+  if(deliveryType === "white") delivery = getDelivery(subtotal);
+  else if(deliveryType === "drop") delivery = getDropOffDelivery(subtotal);
+
+  if(document.getElementById("excludeTaxDelivery").checked){
+    const totalUpfront = (tax + delivery).toFixed(2);
+    document.getElementById("upfrontNotice").innerText = `Tax + Delivery = $${totalUpfront}`;
+    document.getElementById("upfrontNotice").classList.remove("hidden");
+    tax = 0; delivery = 0;
+  } else {
+    document.getElementById("upfrontNotice").classList.add("hidden");
+  }
+
+  // Update UI
+  document.getElementById("merchTotal").innerText = `$${subtotal.toFixed(2)}`;
+  document.getElementById("discount").innerText = discount > 0 ? `-$${discount.toFixed(2)}` : "$0.00";
+  document.getElementById("protectionCost").innerText = `$${protectionCost.toFixed(2)}`;
+  document.getElementById("taxSummary").innerText = `$${tax.toFixed(2)}`;
+  document.getElementById("deliverySummary").innerText = `$${delivery.toFixed(2)}`;
+
+  const grand = afterDiscount + protectionCost + tax + delivery;
+  document.getElementById("grandTotal").innerText = `$${grand.toFixed(2)}`;
+
+  // Savings banner
+  const banner = document.getElementById("savingsBanner");
+  if(discount > 0){
+    banner.innerText = `You Save $${discount.toFixed(2)}`;
+    banner.classList.remove("hidden");
+  } else banner.classList.add("hidden");
+
+  // Finance
+  const financeBox = document.querySelector(".finance-box");
+  if(months > 0){
+    const monthly = grand / months;
+    document.getElementById("financeMonths").innerText = `${months} Months`;
+    document.getElementById("bigMonthly").innerText = `Only $${monthly.toFixed(2)} / month`;
+    financeBox.classList.remove("hidden");
+  } else financeBox.classList.add("hidden");
+}
+
+// Initial calculation
+calculate();
 </script>
 
 </body>
