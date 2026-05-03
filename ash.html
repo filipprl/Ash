@@ -48,54 +48,54 @@ label{ font-size:13px; margin-top:4px; display:block; }
 </div>
 
 <!-- Promotions -->
-<div class="card">
-<h3>Promotions</h3>
-<div class="grid promotions-grid">
-
+<!-- VIP BMSM -->
 <div>
-<h4>VIP Buy More Save More</h4>
+<h4>BMSM VIP</h4>
 <select id="vipBmsm" onchange="selectPromo(this)">
 <option value="">None</option>
-<option data-type="cash" data-min="3999" data-discount="18">18% off - Min 3999</option>
-<option data-type="cash" data-min="1999" data-discount="15">15% off - Min 1999</option>
-<option data-type="cash" data-min="0" data-discount="12">12% off - No min</option>
+<option data-type="cash" data-min="3999" data-discount="20" data-months="6">20% off - Min 3,999 (6 mo)</option>
+<option data-type="cash" data-min="2999" data-discount="15" data-months="6">15% off - Min 2,999 (6 mo)</option>
+<option data-type="cash" data-min="1999" data-discount="12" data-months="6">12% off - Min 1,999 (6 mo)</option>
+<option data-type="cash" data-min="1499" data-discount="10" data-months="6">10% off - Min 1,499 (6 mo)</option>
+<option data-type="cash" data-min="0" data-discount="8" data-months="6">8% off - No Min (6 mo)</option>
 </select>
 </div>
 
+<!-- BMSM -->
 <div>
-<h4>Buy More Save More</h4>
+<h4>BMSM</h4>
 <select id="bmsm" onchange="selectPromo(this)">
 <option value="">None</option>
-<option data-type="cash" data-min="4999" data-discount="15">15% off - Min 4999</option>
-<option data-type="cash" data-min="2999" data-discount="12">12% off - Min 2999</option>
-<option data-type="cash" data-min="999.99" data-discount="10">10% off - Min 999.99</option>
-<option data-type="cash" data-min="0" data-discount="8">8% off - No min</option>
+<option data-type="cash" data-min="3999" data-discount="20" data-months="6">20% off - Min 3,999 (6 mo)</option>
+<option data-type="cash" data-min="2999" data-discount="15" data-months="6">15% off - Min 2,999 (6 mo)</option>
+<option data-type="cash" data-min="1999" data-discount="12" data-months="6">12% off - Min 1,999 (6 mo)</option>
+<option data-type="cash" data-min="1499" data-discount="10" data-months="6">10% off - Min 1,499 (6 mo)</option>
+<option data-type="cash" data-min="0" data-discount="8" data-months="6">8% off - No Min (6 mo)</option>
 </select>
 </div>
 
+<!-- VIP PYW -->
 <div>
-<h4>VIP Pay Your Way</h4>
+<h4>PYW VIP</h4>
 <select id="vipPyw" onchange="selectPromo(this)">
 <option value="">None</option>
-<option data-type="finance" data-min="0" data-discount="10" data-months="12">12 months – 10% off no min</option>
-<option data-type="finance" data-min="999" data-discount="8" data-months="24">24 months – 8% off min 999</option>
-<option data-type="finance" data-min="1499" data-discount="5" data-months="36">36 months – 5% off min 1,499</option>
-<option data-type="finance" data-min="1999" data-discount="0" data-months="60" data-down="15">60 months – 15% Down min 1,999</option>
+<option data-type="finance" data-min="1499" data-discount="10" data-months="12" data-down="0">12 mo – 10% off (Min 1,499)</option>
+<option data-type="finance" data-min="1999" data-discount="8" data-months="24" data-down="5">24 mo – 8% off (Min 1,999) 5% Down</option>
+<option data-type="finance" data-min="2999" data-discount="5" data-months="36" data-down="10">36 mo – 5% off (Min 2,999) 10% Down</option>
+<option data-type="finance" data-min="0" data-discount="0" data-months="60" data-down="15">60 mo – 15% Down</option>
 </select>
 </div>
 
+<!-- PYW -->
 <div>
-<h4>Pay Your Way</h4>
+<h4>PYW</h4>
 <select id="pyw" onchange="selectPromo(this)">
 <option value="">None</option>
-<option data-type="finance" data-min="1499" data-discount="10" data-months="12">12 months – 10% off min 1,499</option>
-<option data-type="finance" data-min="1999" data-discount="8" data-months="24">24 months – 8% off min 1,999</option>
-<option data-type="finance" data-min="2999" data-discount="5" data-months="36">36 months – 5% off min 2,999</option>
-<option data-type="finance" data-min="2999" data-discount="0" data-months="60" data-down="10">60 months – 10% Down min 2,999</option>
+<option data-type="finance" data-min="1499" data-discount="10" data-months="12" data-down="0">12 mo – 10% off (Min 1,499)</option>
+<option data-type="finance" data-min="1999" data-discount="8" data-months="24" data-down="5">24 mo – 8% off (Min 1,999) 5% Down</option>
+<option data-type="finance" data-min="2999" data-discount="5" data-months="36" data-down="10">36 mo – 5% off (Min 2,999) 10% Down</option>
+<option data-type="finance" data-min="0" data-discount="0" data-months="60" data-down="15">60 mo – 15% Down</option>
 </select>
-</div>
-
-</div>
 </div>
 
 <!-- Tax & Delivery -->
